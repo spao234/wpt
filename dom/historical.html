@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <title>Historical DOM features must be removed</title>
 <script src="/resources/testharness.js"></script>
+<!-- REVERT ME: Temporary change to trigger lint -->
+<script src="/resources/testharness.js"></script>
 <script src="/resources/testharnessreport.js"></script>
 <div id=log></div>
 <script>
@@ -64,7 +66,12 @@ documentRemoved.forEach(isRemovedFromDocument)
 
 test(function() {
   // https://github.com/whatwg/html/commit/e236f46820b93d6fe2e2caae0363331075c6c4fb
-  assert_false("load" in document);
+  // REVERT ME: Temporary change to trigger stability failure.
+  if (Math.random() < 0.5) {
+    assert_false("load" in document);
+  } else {
+    assert_true("load" in document);
+  }
 }, "document.load");
 
 test(function() {
