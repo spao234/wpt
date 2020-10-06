@@ -26,7 +26,7 @@ test(testCase => {
   file1.close();
   file2.close();
 
-  assert_throws_dom("UnknownError",
+  assert_throws_dom("NoModificationAllowedError",
                     () => nativeIO.renameSync('test_file_1', 'test_file_2'));
 
   const fileNamesAfterRename = nativeIO.getAllSync();
@@ -59,7 +59,7 @@ test(testCase => {
     file.close();
     nativeIO.deleteSync('test_file');
   });
-  assert_throws_dom("UnknownError", () =>
+  assert_throws_dom("NoModificationAllowedError", () =>
                     nativeIO.renameSync('test_file', 'renamed_test_file'));
   file.close();
 
@@ -97,10 +97,10 @@ test(testCase => {
   });
 
   // First rename fails, as source is still open.
-  assert_throws_dom("UnknownError",
+  assert_throws_dom("NoModificationAllowedError",
                     () => nativeIO.renameSync('opened_file', 'closed_file'));
   // First rename fails again, as source has not been unlocked.
-  assert_throws_dom("UnknownError",
+  assert_throws_dom("NoModificationAllowedError",
                     () => nativeIO.renameSync('opened_file', 'closed_file'));
 }, 'Failed nativeIO.renameSync does not unlock the source.');
 
@@ -116,9 +116,9 @@ test(testCase => {
   });
 
   // First rename fails, as destination is still open.
-  assert_throws_dom("UnknownError",
+  assert_throws_dom("NoModificationAllowedError",
                     () => nativeIO.renameSync('closed_file', 'opened_file'));
   // First rename fails again, as destination has not been unlocked.
-  assert_throws_dom("UnknownError",
+  assert_throws_dom("NoModificationAllowedError",
                     () => nativeIO.renameSync('closed_file', 'opened_file'));
 }, 'Failed nativeIO.renameSync does not unlock the destination.');

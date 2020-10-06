@@ -29,7 +29,7 @@ promise_test(async testCase => {
   await file1.close();
   await file2.close();
 
-  await promise_rejects_dom(testCase, "UnknownError",
+  await promise_rejects_dom(testCase, "NoModificationAllowedError",
                             nativeIO.rename('test_file_1', 'test_file_2'));
 
   const fileNamesAfterRename = await nativeIO.getAll();
@@ -65,7 +65,7 @@ promise_test(async testCase => {
     await file.close();
     await nativeIO.delete('test_file');
   });
-  await promise_rejects_dom(testCase, "UnknownError",
+  await promise_rejects_dom(testCase, "NoModificationAllowedError",
                             nativeIO.rename('test_file', 'renamed_test_file'));
   await file.close();
 
@@ -105,10 +105,10 @@ promise_test(async testCase => {
   });
 
   // First rename fails, as source is still open.
-  await promise_rejects_dom(testCase, "UnknownError",
+  await promise_rejects_dom(testCase, "NoModificationAllowedError",
                             nativeIO.rename('opened_file', 'closed_file'));
   // First rename fails again, as source has not been unlocked.
-  await promise_rejects_dom(testCase, "UnknownError",
+  await promise_rejects_dom(testCase, "NoModificationAllowedError",
                             nativeIO.rename('opened_file', 'closed_file'));
 }, 'Failed nativeIO.rename does not unlock the source.');
 
@@ -124,9 +124,9 @@ promise_test(async testCase => {
   });
 
   // First rename fails, as destination is still open.
-  await promise_rejects_dom(testCase, "UnknownError",
+  await promise_rejects_dom(testCase, "NoModificationAllowedError",
                             nativeIO.rename('closed_file', 'opened_file'));
   // First rename fails again, as destination has not been unlocked.
-  await promise_rejects_dom(testCase, "UnknownError",
+  await promise_rejects_dom(testCase, "NoModificationAllowedError",
                             nativeIO.rename('closed_file', 'opened_file'));
 }, 'Failed nativeIO.rename does not unlock the destination.');
