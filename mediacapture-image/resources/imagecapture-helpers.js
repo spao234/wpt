@@ -50,6 +50,24 @@ function image_capture_test(func, name, properties) {
   }, name, properties);
 }
 
+function new_image_capture_test(func, name, hasPanTiltZoomPermissionGranted, properties) {
+  promise_test(async (t) => {
+    const ptzPermission = hasPanTiltZoomPermissionGranted ? 'granted' : 'denied';
+    await test_driver.set_permission({name: 'camera', panTiltZoom: true},
+      ptzPermission, false);
+    const status = await navigator.permissions.query({ name:'camera', panTiltZoom:true });
+    assert_equals(status.state, ptzPermission);
+
+    let imageCaptureTest = await initialize_image_capture_tests();
+    try {
+      await func(t, imageCaptureTest, hasPanTiltZoomPermissionGranted);
+    } finally {
+      await imageCaptureTest.reset();
+    };
+  }, name, properties);
+}
+
+
 function assert_point2d_array_approx_equals(actual, expected, epsilon) {
   assert_equals(actual.length, expected.length, 'length');
   for (var i = 0; i < actual.length; ++i) {
